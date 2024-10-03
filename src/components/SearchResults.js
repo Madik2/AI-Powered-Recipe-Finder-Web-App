@@ -16,10 +16,11 @@ const GroqChatTest = () => {
   const navigate = useNavigate();
 
   const { query } = location.state || {};
+  const [searchQuery, setSearchQuery] = useState(query);
 
   useEffect(() => {
     if (query) {
-      fetchRecipes(query); // Fetch recipes when the query is available
+      fetchRecipes(query);
     }
   }, [query]);
 
@@ -61,6 +62,12 @@ const GroqChatTest = () => {
     navigate("/recipe-details", { state: { recipe } });
   };
 
+  const handleReload = () => {
+    if (searchQuery) {
+      fetchRecipes(searchQuery);
+    }
+  };
+
   return (
     <div>
       <SearchBar onSearch={fetchRecipes} />
@@ -73,7 +80,7 @@ const GroqChatTest = () => {
         {recipes.map((recipe, index) => (
           <div
             key={index}
-            onClick={() => handleRecipeClick(recipe)} // Navigate when a recipe is clicked
+            onClick={() => handleRecipeClick(recipe)}
             style={{
               cursor: "pointer",
               padding: "10px",
@@ -86,6 +93,10 @@ const GroqChatTest = () => {
           </div>
         ))}
       </div>
+
+      <button onClick={handleReload} style={{ marginTop: "20px" }}>
+        I don't like these
+      </button>
     </div>
   );
 };
