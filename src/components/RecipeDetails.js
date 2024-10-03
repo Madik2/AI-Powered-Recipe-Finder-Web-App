@@ -1,9 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 function RecipeDetails() {
   const location = useLocation();
   const { recipe } = location.state || {};
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    const savedRecipes = JSON.parse(localStorage.getItem("savedRecipes")) || [];
+    const alreadySaved = savedRecipes.some(
+      (savedRecipe) => savedRecipe.name === recipe.name
+    );
+    setIsSaved(alreadySaved);
+  }, [recipe]);
+
+  const handleSaveRecipe = () => {
+    let savedRecipes = JSON.parse(localStorage.getItem("savedRecipes")) || [];
+
+    if (isSaved) {
+      savedRecipes = savedRecipes.filter(
+        (savedRecipe) => savedRecipe.name !== recipe.name
+      );
+    } else {
+      savedRecipes.push(recipe);
+    }
+
+    localStorage.setItem("savedRecipes", JSON.stringify(savedRecipes));
+    setIsSaved(!isSaved); // Toggle the saved state
+  };
 
   if (!recipe) {
     return <div>No recipe data available.</div>;
@@ -27,6 +51,15 @@ function RecipeDetails() {
           <li key={index}>{instruction}</li>
         ))}
       </ol>
+
+      <button
+        onClick={handleSaveRecipe}
+        style={{
+          backgroundColor: isSaved ? "red" : "grey",
+        }}
+      >
+        {isSaved ? "Saved" : "Save"}
+      </button>
     </div>
   );
 }

@@ -107,6 +107,13 @@ const SearchResults = () => {
     }
   };
 
+  const handleFavorite = (recipe) => {
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    favorites.push(recipe);
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    alert(`${recipe.name} added to favorites!`);
+  };
+
   return (
     <div>
       <SearchBar onSearch={fetchRecipes} />
@@ -127,8 +134,11 @@ const SearchResults = () => {
               margin: "10px 0",
             }}
           >
-            <RecipeListItem name={recipe.name} time={recipe.time} />
-            <hr />
+            <RecipeListItem
+              name={recipe.name}
+              time={recipe.time}
+              recipe={recipe}
+            />
           </div>
         ))}
       </div>
