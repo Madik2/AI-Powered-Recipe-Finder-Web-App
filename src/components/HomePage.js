@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import RecipeListItem from "./RecipeListItem";
-
+import "./HomePage.css";
 function HomePage() {
   const [query, setQuery] = useState("");
   const [savedRecipes, setSavedRecipes] = useState([]);
@@ -24,28 +24,31 @@ function HomePage() {
   };
 
   return (
-    <div>
-      <SearchBar onSearch={handleSearch} />
-      <h1>Favorites</h1>
-      {savedRecipes.length > 0 ? (
-        <ul>
-          {savedRecipes.map((recipe, index) => (
-            <li
-              key={index}
-              onClick={() => handleRecipeClick(recipe)}
-              style={{ cursor: "pointer" }}
-            >
-              <RecipeListItem
-                name={recipe.name}
-                time={recipe.time}
-                recipe={recipe}
-              />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No saved recipes yet!</p>
-      )}
+    <div className="homepage-container">
+      <SearchBar onSearch={handleSearch} className="search-bar" />
+      <div className="favorites-container">
+        <h1 className="favorites-container-title">Favorites </h1>
+        {savedRecipes.length > 0 ? (
+          <ul className="favorites-list">
+            {savedRecipes.map((recipe, index) => (
+              <li
+                key={index}
+                onClick={() => handleRecipeClick(recipe)}
+                className="recipe-item"
+                style={{ cursor: "pointer" }}
+              >
+                <RecipeListItem
+                  name={recipe.name}
+                  time={recipe.time}
+                  recipe={recipe}
+                />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="no-recipes-message">No saved recipes yet!</p>
+        )}
+      </div>
     </div>
   );
 }

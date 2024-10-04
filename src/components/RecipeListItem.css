@@ -1,0 +1,133 @@
+.custom-card {
+  width: 384px;
+  height: 88px;
+  position: relative;
+  border-radius: 16px;
+  background-color: rgb(245, 245, 245, 1);
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 0 0 rgba(255, 255, 255, 0.3),
+    /* Removes any darker shadow */ 0 4px 10px rgba(225, 225, 225, 0.5),
+    /* Soft light shadow below */ 0 -4px 10px rgba(225, 225, 225, 0.5),
+    /* Soft light shadow above */ 4px 4px 8px rgba(225, 225, 225, 0.2),
+    /* Light shadow effect */ -4px -4px 8px rgba(225, 225, 225, 0.2); /* Light shadow effect */
+  border: none;
+  cursor: pointer;
+}
+.card-picture {
+  display: flex;
+  opacity: 0.2;
+  width: 88px;
+  height: 88px;
+  background: rgba(227, 227, 227, 1);
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.card-picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
+}
+
+div.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 232px;
+  height: 88px;
+  padding-left: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-left: 70px;
+  gap: 8px;
+}
+
+.custom-card .card-body .card-title {
+  width: 232px;
+  height: 22px;
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22.4px;
+  color: rgba(0, 0, 0, 1);
+  margin: 0;
+}
+
+.custom-card .card-body .card-text {
+  width: 47px;
+  height: 20px;
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19.6px;
+  color: rgba(0, 0, 0, 1);
+  margin: 0;
+}
+
+button.btn {
+  width: 48px;
+  height: 88px;
+  padding-right: 16px;
+  padding-left: 8px;
+  gap: 8px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+button.btn img {
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+}
+@media (max-width: 768px) {
+  .custom-card {
+    flex-direction: column;
+    height: auto;
+    align-items: flex-start;
+  }
+
+  .card-picture {
+    width: 30%;
+    max-width: 80px;
+  }
+
+  .custom-card .card-body .card-title {
+    font-size: 1rem;
+  }
+
+  .custom-card .card-body .card-text {
+    font-size: 0.8rem;
+  }
+
+  button.btn {
+    width: auto;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-card {
+    width: 100%;
+    margin: 0;
+  }
+
+  .card-picture {
+    width: 40%;
+  }
+
+  .custom-card .card-body .card-title {
+    font-size: 0.9rem;
+  }
+
+  .custom-card .card-body .card-text {
+    font-size: 0.75rem;
+  }
+}

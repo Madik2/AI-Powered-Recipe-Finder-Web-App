@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Groq from "groq-sdk";
 import SearchBar from "./SearchBar";
 import RecipeListItem from "./RecipeListItem";
-
+import "./SearchResults.css";
 const groq = new Groq({
   apiKey: process.env.REACT_APP_GROQ_API_KEY,
   dangerouslyAllowBrowser: true,
@@ -34,9 +34,9 @@ const SearchResults = () => {
         messages: [
           {
             role: "user",
-            content: `Please provide 5 distinct recipes based on "${query}". Each recipe should be formatted exactly as follows:
+            content: `Please provide 5 distinct recipes based on "${query}". It is acceptable if some of them are similar or repeated. Each recipe should be formatted exactly as follows:
       
-            - Recipe Name: enclosed in "+++" (e.g., +++Recipe Name+++)
+            - Recipe Name: enclosed in "+++" (e.g., +++Recipe Name+++ , no spacing or other characters).Recipe Name: enclosed in "+++" (e.g., +++RecipeName+++, without any spaces or other characters).
             - Cooking Time: on a new line, just the time in minutes (e.g., 15), no "Cooking Time" label
             - Ingredients: start with "***Ingredients***" and list each ingredient on a new line with a bullet point (*)
             - Cooking Instructions: start with "***Instructions***" and list each step on a new line
@@ -60,7 +60,12 @@ const SearchResults = () => {
         );
         const instructionsMatch = recipe.match(/\*\*\*Instructions\*\*\*(.*)/s);
 
+        // Get the recipe name and truncate if it exceeds 18 characters
         const recipeName = nameMatch ? nameMatch[1].trim() : "Unknown Recipe";
+        const truncatedRecipeName =
+          recipeName.length > 18
+            ? recipeName.substring(0, 15) + "..."
+            : recipeName;
         const cookingTime = timeMatch ? timeMatch[0].trim() : "Unknown Time";
         const ingredients = ingredientsMatch
           ? ingredientsMatch[1]
@@ -74,14 +79,14 @@ const SearchResults = () => {
           : ["No instructions available"];
 
         console.log("Parsed Recipe:", {
-          name: recipeName,
+          name: truncatedRecipeName,
           time: cookingTime,
           ingredients,
           instructions,
         });
 
         return {
-          name: recipeName,
+          name: truncatedRecipeName,
           time: cookingTime,
           ingredients,
           instructions,
@@ -115,37 +120,29 @@ const SearchResults = () => {
   };
 
   return (
-    <div>
-      <SearchBar onSearch={fetchRecipes} />
-      <h1>Suggested recipes </h1>
-
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <div>
-        {recipes.map((recipe, index) => (
-          <div
-            key={index}
-            onClick={() => handleRecipeClick(recipe)}
-            style={{
-              cursor: "pointer",
-              padding: "10px",
-              border: "1px solid black",
-              margin: "10px 0",
-            }}
-          >
-            <RecipeListItem
-              name={recipe.name}
-              time={recipe.time}
-              recipe={recipe}
-            />
-          </div>
-        ))}
+    <div className="searchresults-container">
+      <SearchBar onSearch={fetchRecipes} className="search-bar" />
+      <div className="suggested-recipes">
+        <h1 className="suggested-recipes-title">Suggested recipes </h1>
+        {loading && <div className="spinner"></div>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <div>
+          {recipes.map((recipe, index) => (
+            <div key={index} onClick={() => handleRecipeClick(recipe)}>
+              <RecipeListItem
+                name={recipe.name}
+                time={recipe.time}
+                recipe={recipe}
+              />
+            </div>
+          ))}
+        </div>{" "}
+        <div className="button-container">
+          <button onClick={handleReload} className="reload-button">
+            <span className="reload-button-text">I don't like these</span>
+          </button>
+        </div>
       </div>
-
-      <button onClick={handleReload} style={{ marginTop: "20px" }}>
-        I don't like these
-      </button>
     </div>
   );
 };
